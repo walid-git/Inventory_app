@@ -16,18 +16,19 @@ public class MyDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+DbContract.ProductsEntry.TABLE_NAME+
-        "("+DbContract.ProductsEntry.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
-               DbContract.ProductsEntry.COLUMN_NAME +" TEXT NOT NULL," +
-                DbContract.ProductsEntry.COLUMN_PRICE +" INTEGER NOT NULL DEFAULT 0," +
-                DbContract.ProductsEntry.COLUMN_QUANTITY +" INTEGER NOT NULL DEFAULT 0," +
-                DbContract.ProductsEntry.COLUMN_SUPPLIER_NAME +" TEXT," +
-                DbContract.ProductsEntry.COLUMN_SUPPLIER_PHONE +" TEXT" +
+        db.execSQL("create table "+ ProductsContract.ProductsEntry.TABLE_NAME+
+        "("+ ProductsContract.ProductsEntry.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
+               ProductsContract.ProductsEntry.COLUMN_NAME +" TEXT NOT NULL," +
+                ProductsContract.ProductsEntry.COLUMN_PRICE +" INTEGER NOT NULL DEFAULT 0," +
+                ProductsContract.ProductsEntry.COLUMN_QUANTITY +" INTEGER NOT NULL DEFAULT 0," +
+                ProductsContract.ProductsEntry.COLUMN_SUPPLIER_NAME +" TEXT," +
+                ProductsContract.ProductsEntry.COLUMN_SUPPLIER_PHONE +" TEXT" +
                 ");");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("drop table "+DbContract.ProductsEntry.TABLE_NAME+";");
+            db.execSQL("drop table "+ ProductsContract.ProductsEntry.TABLE_NAME+";");
+            onCreate(db);
     }
 }

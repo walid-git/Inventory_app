@@ -1,5 +1,7 @@
 package com.example.walid.project7;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,29 +23,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void insertData(String name, int price, int quantity, String supp, String phone) {
-        MyDatabase myDatabase = new MyDatabase(this);
-        SQLiteDatabase mDatabase = myDatabase.getWritableDatabase();
+
         ContentValues values = new ContentValues();
-        values.put(DbContract.ProductsEntry.COLUMN_NAME,name);
-        values.put(DbContract.ProductsEntry.COLUMN_PRICE,price);
-        values.put(DbContract.ProductsEntry.COLUMN_QUANTITY,quantity);
-        values.put(DbContract.ProductsEntry.COLUMN_SUPPLIER_NAME,supp);
-        values.put(DbContract.ProductsEntry.COLUMN_SUPPLIER_PHONE, phone);
-        mDatabase.insert(DbContract.ProductsEntry.TABLE_NAME, null, values);
-        mDatabase.close();
+        values.put(ProductsContract.ProductsEntry.COLUMN_NAME,name);
+        values.put(ProductsContract.ProductsEntry.COLUMN_PRICE,price);
+        values.put(ProductsContract.ProductsEntry.COLUMN_QUANTITY,quantity);
+        values.put(ProductsContract.ProductsEntry.COLUMN_SUPPLIER_NAME,supp);
+        values.put(ProductsContract.ProductsEntry.COLUMN_SUPPLIER_PHONE, phone);
+        getContentResolver().insert(ProductsContract.ProductsEntry.CONTENT_URI, values);
+
     }
 
 
     public void queryData() {
-        MyDatabase myDatabase = new MyDatabase(this);
-        SQLiteDatabase mDatabase = myDatabase.getReadableDatabase();
-        Cursor c = mDatabase.query(DbContract.ProductsEntry.TABLE_NAME, null, null, null, null, null, null);
-        int idIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_ID);
-        int nameIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_NAME);
-        int priceIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_PRICE);
-        int quantityIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_QUANTITY);
-        int suppNameIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_SUPPLIER_NAME);
-        int suppPhoneIndex = c.getColumnIndex(DbContract.ProductsEntry.COLUMN_SUPPLIER_PHONE);
+
+        Cursor c = getContentResolver().query(ProductsContract.ProductsEntry.CONTENT_URI, null, null, null, null);
+        int idIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_ID);
+        int nameIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_NAME);
+        int priceIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_PRICE);
+        int quantityIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_QUANTITY);
+        int suppNameIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_SUPPLIER_NAME);
+        int suppPhoneIndex = c.getColumnIndex(ProductsContract.ProductsEntry.COLUMN_SUPPLIER_PHONE);
         StringBuilder str = new StringBuilder();
         while (c.moveToNext()) {
            str.append("\nID: "+c.getInt(idIndex)+
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             );
         }
         Log.d("walidTag", "query result:\n" + str.toString());
-        mDatabase.close();
         c.close();
     }
 }
